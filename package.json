@@ -1,6 +1,6 @@
 {
   "name": "mqtt-extras",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Wrappers and helpers for use with the MQTT.js package",
   "main": "index.js",
   "scripts": {
