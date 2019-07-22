@@ -1,6 +1,7 @@
 import {wrappedMqttClient, alreadyWrapped, asPromise} from './symbols'
 
-const mappedMethods = ['publish',  'subscribe', 'unsubscribe', 'end']
+const mappedPromiseMethods = ['publish',  'subscribe', 'unsubscribe', 'end']
+const mappedMethods = ['removeListener', 'on']
 
 function toPromise(res, rej) {
   return (err, ...args) => {
@@ -21,8 +22,10 @@ function MqttClientAsPromise(mqttClient) {
   this[asPromise] = true
   this[wrappedMqttClient] = mqttClient
 
-  this.on = (...args) => mqttClient.on(...args)
   for (const m of mappedMethods)
+    this[m] = (...args) => mqttClient[m](...args)
+
+  for (const m of mappedPromiseMethods)
     this[m] = (...args) => new Promise((res, rej) => mqttClient[m](...args, toPromise(res, rej)))
 }
 

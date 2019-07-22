@@ -12,7 +12,8 @@ const debug = {
 }
 
 const events = ['connect', 'reconnect', 'close', 'disconnect', 'offline', 'end', 'message', 'packetsend', 'packetreceive']
-const mappedMethods = ['publish',  'subscribe', 'unsubscribe', 'end']
+const mappedPromiseMethods = ['publish',  'subscribe', 'unsubscribe', 'end']
+const mappedMethods = ['on', 'removeListener']
 
 function MqttClientWithDebug(mqttClient) {
   this[wrappedMqttClient] = mqttClient
@@ -26,9 +27,10 @@ function MqttClientWithDebug(mqttClient) {
       debug.payload.extend(event)(`${util.inspect(arguments[0], {compact: true, breakLength: 160})}`)
     })
 
-  this.on = (...args) => mqttClient.on(...args)
-
   for (const m of mappedMethods)
+    this[m] = (...args) => mqttClient[m](...args)
+
+  for (const m of mappedPromiseMethods)
     this[m] = (...args) => {
       _debug.extend(m)(args.filter(f => f !== undefined).filter(f => !(f instanceof Function)).map(f => util.inspect(f, {compact: true})).join(' '))
       return mqttClient[m](...args)
