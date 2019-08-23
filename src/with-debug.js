@@ -1,6 +1,7 @@
 import __debug from 'debug'
 import util from 'util'
 import {wrappedMqttClient, alreadyWrapped, withDebug} from './symbols'
+import {events, mappedPromiseMethods, mappedMethods} from './contants'
 
 const _debug = __debug('mqtt')
 
@@ -10,10 +11,6 @@ const debug = {
   error: _debug.extend('error'),
   extend: _debug.extend(?)
 }
-
-const events = ['connect', 'reconnect', 'close', 'disconnect', 'offline', 'end', 'message', 'packetsend', 'packetreceive']
-const mappedPromiseMethods = ['publish',  'subscribe', 'unsubscribe', 'end']
-const mappedMethods = ['on', 'removeListener']
 
 function MqttClientWithDebug(mqttClient) {
   this[wrappedMqttClient] = mqttClient

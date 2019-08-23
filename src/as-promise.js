@@ -1,7 +1,5 @@
 import {wrappedMqttClient, alreadyWrapped, asPromise} from './symbols'
-
-const mappedPromiseMethods = ['publish',  'subscribe', 'unsubscribe', 'end']
-const mappedMethods = ['removeListener', 'on']
+import {mappedPromiseMethods, mappedMethods} from './contants'
 
 function toPromise(res, rej) {
   return (err, ...args) => {
